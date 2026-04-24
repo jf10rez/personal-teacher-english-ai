@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.env.local
+.env.production
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+.DS_Store
+.idea
+.vscode
+*.log
+*.tsbuildinfo
+.agents

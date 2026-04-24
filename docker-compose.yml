@@ -1,0 +1,56 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:4000
+      - VITE_WS_URL=http://localhost:4000
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend/src:/app/src
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - MONGODB_URI=mongodb://mongodb:27017/english-learning
+      - JWT_SECRET=${JWT_SECRET:-supersecretjwtkey123}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-supersecretrefreshkey456}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge
