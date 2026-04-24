@@ -22,8 +22,8 @@ export class LearningPlanService {
     });
 
     const result = await this.geminiService.generateJson(
-      'You are an expert English learning coach. Respond ONLY with valid JSON.',
-      prompt
+      'You are an expert English learning coach. Create a JSON learning plan.',
+      prompt,
     );
 
     await this.planModel.deleteMany({ userId, active: true });
